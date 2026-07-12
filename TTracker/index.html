@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TTracker</title>
+ <link rel="icon" type="image/png" href="icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #ffffff;
+    --nav-bg: #f3f3f3;
+    --border: #e5e5e5;
+    --border-strong: #d9d9d9;
+    --text: #1b1b1b;
+    --text-soft: #6b6b6b;
+    --accent: #0067c0;
+    --accent-soft: #cfe8ff;
+    --row-hover: #f5f9fd;
+    --row-selected: #cce8ff;
+    --folder-top: #FFE082;
+    --folder-bottom: #F5A623;
+    --statusbar: #f3f3f3;
+    --green: #107c10;
+    --red: #c42b1c;
+  }
+  *{box-sizing:border-box; font-family:'Inter', sans-serif;}
+  html,body{margin:0;height:100%;}
+  body{ background:#dfe4e8; }
+
+  .window{
+    width:100%;
+    height:100vh;
+    background:var(--bg);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  .toolbar{
+    height:44px;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    padding:0 10px;
+    border-bottom:1px solid var(--border);
+    flex-shrink:0;
+  }
+  .tool-btn{
+    display:flex; align-items:center; gap:6px;
+    height:30px;
+    padding:0 10px;
+    border-radius:4px;
+    background:transparent;
+    border:1px solid transparent;
+    cursor:pointer;
+    font-size:12.5px;
+    color:var(--text);
+  }
+  .tool-btn .material-icons{ font-size:17px; }
+  .tool-btn:hover{ background:#f0f0f0; border-color:var(--border-strong); }
+  .tool-sep{ width:1px; height:22px; background:var(--border-strong); margin:0 6px; }
+  .icon-btn{
+    width:30px;height:30px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:4px;
+    background:transparent;
+    border:none;
+    color:var(--text-soft);
+    cursor:pointer;
+  }
+  .icon-btn:hover{ background:#f0f0f0; color:var(--text); }
+  .icon-btn:disabled{ opacity:0.35; cursor:default; }
+  .icon-btn:disabled:hover{ background:transparent; color:var(--text-soft); }
+  .icon-btn .material-icons{ font-size:18px; }
+
+  .addressbar{
+    height:38px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:0 10px;
+    border-bottom:1px solid var(--border);
+    flex-shrink:0;
+  }
+  .breadcrumb{
+    flex:1;
+    display:flex;
+    align-items:center;
+    height:28px;
+    border:1px solid var(--border-strong);
+    border-radius:4px;
+    padding:0 8px;
+    font-size:12.5px;
+    gap:4px;
+    background:#fff;
+  }
+  .crumb{ cursor:pointer; color:var(--text); padding:2px 4px; border-radius:3px; display:flex; align-items:center; gap:4px;}
+  .crumb:hover{ background:#eef2f6; color:var(--accent); }
+  .crumb .material-icons{ font-size:14px; color:var(--text-soft); }
+  .crumb-sep{ color:var(--text-soft); font-size:12px; }
+  .search-box{
+    width:200px;
+    height:28px;
+    border:1px solid var(--border-strong);
+    border-radius:4px;
+    display:flex;
+    align-items:center;
+    padding:0 8px;
+    gap:6px;
+    color:var(--text-soft);
+    font-size:12px;
+    background:#fff;
+  }
+  .search-box:focus-within{ border-color:var(--accent); }
+  .search-box .material-icons{ font-size:15px; }
+  .search-box input{
+    border:none;
+    outline:none;
+    background:transparent;
+    font-size:12px;
+    color:var(--text);
+    width:100%;
+  }
+  .search-box .clear-search{
+    cursor:pointer;
+    font-size:14px;
+    color:var(--text-soft);
+    display:none;
+  }
+  .search-box .clear-search.show{ display:flex; }
+  .search-box .clear-search:hover{ color:var(--red); }
+
+  .body{
+    flex:1;
+    display:flex;
+    min-height:0;
+    position:relative;
+  }
+
+  .nav-pane{
+    width:220px;
+    flex-shrink:0;
+    background:var(--nav-bg);
+    border-right:1px solid var(--border);
+    overflow-y:auto;
+    padding:8px 0;
+  }
+  .nav-section-label{
+    font-size:11px;
+    font-weight:600;
+    color:var(--text-soft);
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    padding:8px 14px 4px 14px;
+  }
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 14px;
+    font-size:13px;
+    cursor:pointer;
+    color:var(--text);
+  }
+  .nav-item .material-icons{ font-size:17px; }
+  .nav-item:hover{ background:#e8eef3; }
+  .nav-item.active{ background:var(--accent-soft); color:var(--accent); font-weight:600; }
+  .nav-folder-icon{
+    background: linear-gradient(180deg, var(--folder-top), var(--folder-bottom));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .nav-new{
+    display:flex; align-items:center; gap:8px;
+    padding:6px 14px; margin-top:4px;
+    font-size:12.5px; color:var(--text-soft); cursor:pointer;
+    border-top:1px dashed var(--border-strong);
+    padding-top:10px;
+  }
+  .nav-new:hover{ color:var(--accent); }
+  .nav-new .material-icons{ font-size:16px; }
+  .new-folder-inline{
+    margin:8px 14px 0 14px;
+    display:none;
+    flex-direction:column;
+    gap:6px;
+    background:#fff;
+    border:1px solid var(--border-strong);
+    border-radius:4px;
+    padding:8px;
+  }
+  .new-folder-inline.open{ display:flex; }
+  .new-folder-inline input{
+    font-size:12.5px;
+    padding:5px 6px;
+    border:1px solid var(--border-strong);
+    border-radius:3px;
+  }
+  .new-folder-inline button{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    border-radius:3px;
+    padding:6px;
+    font-size:12px;
+    cursor:pointer;
+  }
+
+  .content-pane{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    overflow:hidden;
+  }
+
+  .grid-view{
+    flex:1;
+    overflow-y:auto;
+    padding:20px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, 110px);
+    gap:18px;
+    align-content:start;
+  }
+  .grid-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:10px 6px;
+    border-radius:4px;
+    cursor:pointer;
+    border:1px solid transparent;
+  }
+  .grid-item:hover{ background:var(--row-hover); border-color:var(--border); }
+  .grid-item.selected{ background:var(--row-selected); border-color:#99d1ff; }
+  .grid-item .folder-icon-wrap{ position:relative; }
+  .grid-item .material-icons.folder-ico{
+    font-size:54px;
+    background: linear-gradient(180deg, var(--folder-top), var(--folder-bottom));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 1px rgba(0,0,0,0.15));
+  }
+  .grid-item .del-x{
+    position:absolute; top:-4px; right:-18.5px;
+    width:16px;height:16px;
+    background:#fff; border:1px solid var(--border-strong); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; color:var(--red); opacity:0; cursor:pointer;
+  }
+  .grid-item:hover .del-x{ opacity:1; }
+  .grid-item .name{ font-size:12.5px; margin-top:6px; word-break:break-word; line-height:1.25; }
+  .grid-item .meta{ font-size:10.5px; color:var(--text-soft); margin-top:2px; }
+  .new-item-tile{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--text-soft); cursor:pointer; border:1px dashed var(--border-strong);
+    border-radius:4px; padding:10px 6px;
+  }
+  .new-item-tile:hover{ color:var(--accent); border-color:var(--accent); }
+  .new-item-tile .material-icons{ font-size:34px; }
+  .new-item-tile .name{ font-size:12px; margin-top:6px; }
+
+  .details-header{
+    display:flex;
+    align-items:center;
+    padding:6px 14px;
+    border-bottom:1px solid var(--border);
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--text-soft);
+    flex-shrink:0;
+  }
+  .col-check{ width:34px; }
+  .col-name{ flex:1; }
+  .col-amount{ width:110px; text-align:right; padding-right:20px; }
+  .col-status{ width:110px; }
+
+  .details-list{ flex:1; overflow-y:auto; }
+  .file-row{
+    display:flex;
+    align-items:center;
+    padding:7px 14px;
+    border-bottom:1px solid #f2f2f2;
+    font-size:13px;
+    cursor:default;
+  }
+  .file-row:hover{ background:var(--row-hover); }
+  .file-row.checked .col-name .fname{ color:var(--text-soft); text-decoration:line-through; }
+
+  .checkbox{
+    width:16px;height:16px;
+    border:1.5px solid #8a8a8a;
+    border-radius:3px;
+    cursor:pointer;
+    position:relative;
+    background:#fff;
+    flex-shrink:0;
+  }
+  .checkbox.checked{ background:var(--accent); border-color:var(--accent); }
+  .checkbox.checked::after{
+    content:"✓";
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:11px; font-weight:700;
+  }
+
+  .col-check .checkbox{ margin:0 auto; }
+
+  .col-name{
+    display:flex; align-items:center; gap:8px;
+    padding-left:10px;
+  }
+  .col-name .material-icons.file-ico{ font-size:18px; color:#5b8dc9; }
+
+  .col-amount{ font-weight:700; color:var(--red); }
+
+  .status-pill{
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:10px;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+  }
+  .status-pill.done{ background:#e6f4ea; color:var(--green); }
+  .status-pill.pending{ background:#fdf1e6; color:#a35c00; }
+  .status-pill .material-icons{ font-size:12px; }
+
+  .row-del{
+    margin-left:auto;
+    color:var(--text-soft);
+    opacity:0;
+    cursor:pointer;
+    padding:2px 8px;
+  }
+  .file-row:hover .row-del{ opacity:1; }
+  .row-del:hover{ color:var(--red); }
+  .row-del .material-icons{ font-size:16px; }
+
+  .add-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border-top:1px solid var(--border);
+    background:#fafafa;
+  }
+  .add-row input{
+    font-size:13px;
+    padding:6px 8px;
+    border:1px solid var(--border-strong);
+    border-radius:4px;
+  }
+  .add-row input[name="cname"]{ flex:1; }
+  .add-row input[name="camount"]{ width:100px; }
+  .add-row button{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:7px 14px;
+    border-radius:4px;
+    font-size:12.5px;
+    cursor:pointer;
+    display:flex; align-items:center; gap:4px;
+  }
+  .add-row button:hover{ background:#005ba7; }
+
+  .empty-state{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    color:var(--text-soft);
+    gap:8px;
+    padding:48px 20px 20px 20px;
+  }
+  .empty-state .material-icons{ font-size:48px; color:#d9d9d9; }
+
+  .money-widget{
+    position:absolute;
+    top:8px;
+    right:12px;
+    z-index:20;
+  }
+  .money-btn{
+    display:flex; align-items:center; gap:8px;
+    background:#fff;
+    border:1px solid var(--border-strong);
+    border-radius:5px;
+    padding:6px 12px;
+    cursor:pointer;
+    box-shadow:0 1px 3px rgba(0,0,0,0.08);
+  }
+  .money-btn:hover{ border-color:var(--accent); }
+  .money-btn .material-icons{ font-size:16px; color:var(--green); }
+  .money-btn .amount{ font-weight:700; font-size:14px; color:var(--text); }
+  .money-btn .material-icons.caret{ font-size:15px; color:var(--text-soft); transition:transform .15s; }
+  .money-btn.open .caret{ transform:rotate(180deg); }
+
+  .money-dropdown{
+    position:absolute;
+    top:calc(100% + 6px);
+    right:0;
+    background:#fff;
+    border:1px solid var(--border-strong);
+    border-radius:6px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+    min-width:200px;
+    padding:10px 14px;
+    display:none;
+  }
+  .money-dropdown.open{ display:block; }
+  .money-dropdown .drow{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:5px 0; font-size:13px;
+  }
+  .money-dropdown .drow .lbl{ color:var(--text-soft); }
+  .money-dropdown .drow .val{ font-weight:700; }
+  .money-dropdown hr{ border:none; border-top:1px solid var(--border); margin:4px 0; }
+
+  .modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.35);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:50;
+  }
+  .modal-backdrop.open{ display:flex; }
+  .modal{
+    background:#fff;
+    border-radius:8px;
+    width:320px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+    overflow:hidden;
+  }
+  .modal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .modal-header h3{
+    margin:0;
+    font-size:14px;
+    font-weight:600;
+  }
+  .modal-close{
+    cursor:pointer;
+    color:var(--text-soft);
+    display:flex;
+  }
+  .modal-close:hover{ color:var(--red); }
+  .modal-body{
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .modal-field label{
+    display:block;
+    font-size:12px;
+    color:var(--text-soft);
+    margin-bottom:6px;
+  }
+  .modal-field .row{
+    display:flex;
+    gap:8px;
+  }
+  .modal-field input[type="number"]{
+    width:90px;
+    padding:7px 8px;
+    border:1px solid var(--border-strong);
+    border-radius:4px;
+    font-size:13px;
+  }
+  .modal-field select{
+    flex:1;
+    padding:7px 8px;
+    border:1px solid var(--border-strong);
+    border-radius:4px;
+    font-size:13px;
+    background:#fff;
+  }
+  .modal-current{
+    font-size:11.5px;
+    color:var(--text-soft);
+  }
+  .modal-actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-top:4px;
+    border-top:1px dashed var(--border-strong);
+  }
+  .modal-actions button{
+    border:none;
+    border-radius:4px;
+    padding:8px 14px;
+    font-size:12.5px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .btn-secondary{
+    background:#f0f0f0;
+    color:var(--text);
+  }
+  .btn-secondary:hover{ background:#e5e5e5; }
+  .btn-primary{
+    background:var(--accent);
+    color:#fff;
+  }
+  .btn-primary:hover{ background:#005ba7; }
+
+  .statusbar{
+    height:26px;
+    background:var(--statusbar);
+    border-top:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    font-size:11.5px;
+    color:var(--text-soft);
+    flex-shrink:0;
+  }
+  .statusbar .reset-info{ display:flex; align-items:center; gap:6px; }
+  .statusbar .reset-info .material-icons{ font-size:14px; }
+  .statusbar .pulse{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--green);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-thumb{ background:#c7c7c7; border-radius:5px; }
+  ::-webkit-scrollbar-thumb:hover{ background:#a8a8a8; }
+</style>
+</head>
+<body>
+
+<div class="window">
+
+  <div class="toolbar">
+    <button class="tool-btn" id="newFolderBtn"><span class="material-icons">create_new_folder</span>New folder</button>
+    <button class="tool-btn" id="newItemBtn" style="display:none;"><span class="material-icons">note_add</span>New task</button>
+    <div class="tool-sep"></div>
+    <button class="icon-btn" title="Refresh" onclick="render()"><span class="material-icons">refresh</span></button>
+    <div class="tool-sep"></div>
+    <button class="icon-btn" id="backBtn" title="Back"><span class="material-icons">arrow_back</span></button>
+    <button class="icon-btn" id="forwardBtn" title="Forward"><span class="material-icons">arrow_forward</span></button>
+    <div class="tool-sep"></div>
+    <button class="icon-btn" id="settingsBtn" title="Reset settings"><span class="material-icons">settings</span></button>
+  </div>
+
+  <div class="addressbar">
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <div class="search-box">
+      <span class="material-icons">search</span>
+      <input id="searchInput" type="text" placeholder="Search Tracker">
+      <span class="material-icons clear-search" id="clearSearch">close</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="nav-pane">
+      <div class="nav-section-label">Quick access</div>
+      <div class="nav-item" id="navThisPC">
+        <span class="material-icons">devices</span> TTracker
+      </div>
+      <div class="nav-section-label">Folders</div>
+      <div id="navFolderList"></div>
+      <div class="nav-new" id="showNewFolderInline">
+        <span class="material-icons">add</span> New folder
+      </div>
+      <div class="new-folder-inline" id="newFolderInline">
+        <input id="nfName" placeholder="Folder name">
+        <button id="nfConfirm">Create</button>
+      </div>
+    </div>
+
+    <div class="content-pane" id="contentPane"></div>
+
+    <div class="money-widget">
+      <button class="money-btn" id="moneyBtn">
+        <span class="material-icons">payments</span>
+        <span class="amount" id="moneyValue">$0.00</span>
+        <span class="material-icons caret">expand_more</span>
+      </button>
+      <div class="money-dropdown" id="moneyDropdown">
+        <div class="drow"><span class="lbl">Current</span><span class="val" id="dropCurrent">$0.00</span></div>
+        <hr>
+        <div class="drow"><span class="lbl">Previous earnings</span><span class="val" id="dropPrevious">$0.00</span></div>
+        <hr>
+        <div class="drow"><span class="lbl">Lifetime</span><span class="val" id="dropLifetime">$0.00</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="statusbar">
+    <span id="itemCountLabel">0 items</span>
+    <div class="reset-info">
+      <span class="pulse"></span>
+      <span class="material-icons">history</span>
+      Resets in <span id="countdownText">--:--</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Reset settings</h3>
+      <span class="material-icons modal-close" id="settingsClose">close</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label>Reset</label>
+        <select id="resetType" style="width:100%;">
+          <option value="interval">Every (interval)</option>
+          <option value="schedule">On a schedule</option>
+        </select>
+      </div>
+
+      <div class="modal-field" id="intervalFields">
+        <label>Reset every</label>
+        <div class="row">
+          <input type="number" id="resetAmount" min="1" value="2">
+          <select id="resetUnit">
+            <option value="minutes">Minutes</option>
+            <option value="hours">Hours</option>
+            <option value="days">Days</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-field" id="scheduleFields" style="display:none;">
+        <label>Repeat</label>
+        <select id="scheduleRepeat" style="width:100%;margin-bottom:10px;">
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+
+        <div id="weeklyGroup">
+          <label>Day of week</label>
+          <select id="scheduleWeekday" style="width:100%;margin-bottom:10px;">
+            <option value="0">Sunday</option>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5" selected>Friday</option>
+            <option value="6">Saturday</option>
+          </select>
+        </div>
+
+        <div id="yearlyGroup" style="display:none;">
+          <label>Month</label>
+          <select id="scheduleMonth" style="width:100%;margin-bottom:10px;">
+            <option value="0">January</option>
+            <option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="11">December</option>
+          </select>
+        </div>
+
+        <div id="dayOfMonthGroup" style="display:none;">
+          <label>Day of month</label>
+          <input type="number" id="scheduleDay" min="1" max="31" value="1" style="width:100%;margin-bottom:10px;">
+        </div>
+
+        <label>Time</label>
+        <input type="time" id="scheduleTime" value="00:00" style="width:100%;">
+      </div>
+
+      <div class="modal-current" id="modalCurrentInterval"></div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" id="resetNowBtn"><span class="material-icons" style="font-size:15px;">restart_alt</span>Reset now</button>
+        <button class="btn-primary" id="saveResetBtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'tracker-explorer-state';
+const DEFAULT_RESET_MS = 2 * 60 * 1000;
+
+let state = null;
+let activeFolderId = null;
+let searchQuery = '';
+let historyStack = [null];
+let historyIndex = 0;
+
+function uid(){ return Math.random().toString(36).slice(2, 10); }
+
+function defaultState(){
+  return {
+    folders: [
+      {
+        id: 'chores',
+        name: 'Chores',
+        items: [
+          { id: uid(), name: 'Unload dishwasher', amount: 0.50, checked: false },
+          { id: uid(), name: 'Load dishwasher', amount: 0.50, checked: false },
+          { id: uid(), name: 'Take out the trash', amount: 0.50, checked: false },
+          { id: uid(), name: 'Go for a run', amount: 0.50, checked: false },
+          { id: uid(), name: 'Clear table', amount: 0.50, checked: false },
+        ]
+      }
+    ],
+    lifetime: 0,
+    previousEarnings: 0,
+    resetMode: 'interval',
+    resetIntervalMs: DEFAULT_RESET_MS,
+    resetSchedule: { repeat: 'weekly', weekday: 5, day: 1, month: 0, time: '00:00' },
+    lastReset: Date.now(),
+    nextResetAt: Date.now() + DEFAULT_RESET_MS
+  };
+}
+
+async function loadState(){
+  try{
+    const res = await fetch("/api/state");
+    const data = await res.json();
+
+    if(Object.keys(data).length){
+      state = data;
+    } else {
+      state = defaultState();
+      saveState();
+    }
+
+  }catch(e){
+    console.error(e);
+    state = defaultState();
+  }
+}
+
+function saveState(){
+  fetch("/api/state", {
+    method: "POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify(state)
+  });
+}
+
+function currentMoney(){
+  let total = 0;
+  for(const f of state.folders) for(const it of f.items) if(it.checked) total += Number(it.amount);
+  return total;
+}
+
+function fmt(n){ return '$' + Number(n).toFixed(2); }
+function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function navigateTo(folderId){
+  activeFolderId = folderId;
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  historyStack = historyStack.slice(0, historyIndex + 1);
+  historyStack.push(folderId);
+  historyIndex = historyStack.length - 1;
+  render();
+}
+
+function goBack(){
+  if(historyIndex <= 0) return;
+  historyIndex -= 1;
+  activeFolderId = historyStack[historyIndex];
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  render();
+}
+
+function goForward(){
+  if(historyIndex >= historyStack.length - 1) return;
+  historyIndex += 1;
+  activeFolderId = historyStack[historyIndex];
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  render();
+}
+
+function renderNav(){
+  const list = document.getElementById('navFolderList');
+  list.innerHTML = '';
+  state.folders.forEach(f => {
+    const item = document.createElement('div');
+    item.className = 'nav-item' + (activeFolderId === f.id ? ' active' : '');
+    item.innerHTML = `<span class="material-icons nav-folder-icon">folder</span> ${escapeHtml(f.name)}`;
+    item.addEventListener('click', () => navigateTo(f.id));
+    list.appendChild(item);
+  });
+  document.getElementById('navThisPC').className = 'nav-item' + (activeFolderId === null ? ' active' : '');
+}
+
+document.getElementById('navThisPC').addEventListener('click', () => navigateTo(null));
+
+function renderBreadcrumb(){
+  const bc = document.getElementById('breadcrumb');
+  bc.innerHTML = '';
+  const root = document.createElement('div');
+  root.className = 'crumb';
+  root.innerHTML = `<span class="material-icons">devices</span> TTracker`;
+  root.addEventListener('click', () => navigateTo(null));
+  bc.appendChild(root);
+
+  const folder = state.folders.find(f => f.id === activeFolderId);
+  if(folder){
+    const sep = document.createElement('span');
+    sep.className = 'crumb-sep';
+    sep.textContent = '›';
+    bc.appendChild(sep);
+    const c = document.createElement('div');
+    c.className = 'crumb';
+    c.innerHTML = `<span class="material-icons nav-folder-icon">folder</span> ${escapeHtml(folder.name)}`;
+    bc.appendChild(c);
+  }
+}
+
+function renderContent(){
+  const pane = document.getElementById('contentPane');
+  pane.innerHTML = '';
+
+  document.getElementById('newItemBtn').style.display = activeFolderId ? 'flex' : 'none';
+
+  if(activeFolderId === null){
+    renderGridView(pane);
+  } else {
+    const folder = state.folders.find(f => f.id === activeFolderId);
+    if(!folder){ activeFolderId = null; renderGridView(pane); return; }
+    renderDetailsView(pane, folder);
+  }
+  updateStatusCount();
+}
+
+function renderGridView(pane){
+  const grid = document.createElement('div');
+  grid.className = 'grid-view';
+
+  const q = searchQuery.toLowerCase();
+  const folders = state.folders.filter(f => !q || f.name.toLowerCase().includes(q));
+
+  if(folders.length === 0 && q){
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.style.gridColumn = '1 / -1';
+    empty.innerHTML = `<span class="material-icons">search_off</span><div>No folders match "${escapeHtml(searchQuery)}"</div>`;
+    grid.appendChild(empty);
+    pane.appendChild(grid);
+    return;
+  }
+
+  folders.forEach(f => {
+    const done = f.items.filter(i => i.checked).length;
+    const tile = document.createElement('div');
+    tile.className = 'grid-item';
+    tile.innerHTML = `
+      <div class="folder-icon-wrap">
+        <span class="material-icons folder-ico">folder</span>
+        <span class="del-x">✕</span>
+      </div>
+      <div class="name">${escapeHtml(f.name)}</div>
+      <div class="meta">${f.items.length} item${f.items.length===1?'':'s'} · ${done} done</div>
+    `;
+    tile.addEventListener('dblclick', () => navigateTo(f.id));
+    tile.addEventListener('click', (e) => {
+      if(e.target.classList.contains('del-x')) return;
+      document.querySelectorAll('.grid-item').forEach(el => el.classList.remove('selected'));
+      tile.classList.add('selected');
+    });
+    tile.querySelector('.del-x').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(!confirm(`Delete folder "${f.name}" and all its items?`)) return;
+      state.folders = state.folders.filter(x => x.id !== f.id);
+      saveState();
+      render();
+    });
+    grid.appendChild(tile);
+  });
+
+  if(!q){
+    const newTile = document.createElement('div');
+    newTile.className = 'new-item-tile';
+    newTile.innerHTML = `<span class="material-icons">create_new_folder</span><div class="name">New folder</div>`;
+    newTile.addEventListener('click', () => document.getElementById('newFolderInline').classList.add('open'));
+    grid.appendChild(newTile);
+  }
+
+  pane.appendChild(grid);
+}
+
+function renderDetailsView(pane, folder){
+  const header = document.createElement('div');
+  header.className = 'details-header';
+  header.innerHTML = `
+    <div class="col-check"></div>
+    <div class="col-name">Name</div>
+    <div class="col-amount">Amount</div>
+    <div class="col-status">Status</div>
+  `;
+  pane.appendChild(header);
+
+  const list = document.createElement('div');
+  list.className = 'details-list';
+
+  const q = searchQuery.toLowerCase();
+  const items = folder.items.filter(i => !q || i.name.toLowerCase().includes(q));
+
+  if(folder.items.length === 0){
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.innerHTML = `<span class="material-icons">inbox</span><div>This folder is empty. Add a task below.</div>`;
+    list.appendChild(empty);
+  } else if(items.length === 0){
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.innerHTML = `<span class="material-icons">search_off</span><div>No tasks match "${escapeHtml(searchQuery)}"</div>`;
+    list.appendChild(empty);
+  }
+
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'file-row' + (item.checked ? ' checked' : '');
+
+    const checkCol = document.createElement('div');
+    checkCol.className = 'col-check';
+    const box = document.createElement('div');
+    box.className = 'checkbox' + (item.checked ? ' checked' : '');
+    box.addEventListener('click', () => {
+      item.checked = !item.checked;
+      saveState();
+      render();
+    });
+    checkCol.appendChild(box);
+
+    const nameCol = document.createElement('div');
+    nameCol.className = 'col-name';
+    nameCol.innerHTML = `<span class="material-icons file-ico">description</span><span class="fname">${escapeHtml(item.name)}</span>`;
+    nameCol.style.cursor = 'pointer';
+    nameCol.addEventListener('click', () => box.click());
+
+    const amountCol = document.createElement('div');
+    amountCol.className = 'col-amount';
+    amountCol.textContent = `[${fmt(item.amount)}]`;
+
+    const statusCol = document.createElement('div');
+    statusCol.className = 'col-status';
+    statusCol.innerHTML = item.checked
+      ? `<span class="status-pill done"><span class="material-icons">check_circle</span>Done</span>`
+      : `<span class="status-pill pending"><span class="material-icons">schedule</span>Pending</span>`;
+
+    const del = document.createElement('div');
+    del.className = 'row-del';
+    del.innerHTML = `<span class="material-icons">delete</span>`;
+    del.addEventListener('click', () => {
+      folder.items = folder.items.filter(i => i.id !== item.id);
+      saveState();
+      render();
+    });
+
+    row.appendChild(checkCol);
+    row.appendChild(nameCol);
+    row.appendChild(amountCol);
+    row.appendChild(statusCol);
+    row.appendChild(del);
+    list.appendChild(row);
+  });
+
+  pane.appendChild(list);
+
+  const addRow = document.createElement('div');
+  addRow.className = 'add-row';
+  addRow.innerHTML = `
+    <span class="material-icons" style="color:#8a8a8a;font-size:18px;">add</span>
+    <input name="cname" placeholder="Task name">
+    <input name="camount" placeholder="0.00" inputmode="decimal">
+    <button><span class="material-icons" style="font-size:15px;">add</span>Add</button>
+  `;
+  const nameInput = addRow.querySelector('input[name="cname"]');
+  const amountInput = addRow.querySelector('input[name="camount"]');
+  const submit = () => {
+    const name = nameInput.value.trim();
+    const amount = parseFloat(amountInput.value);
+    if(!name || isNaN(amount)) return;
+    folder.items.push({ id: uid(), name, amount, checked: false });
+    saveState();
+    render();
+  };
+  addRow.querySelector('button').addEventListener('click', submit);
+  nameInput.addEventListener('keydown', e => { if(e.key === 'Enter') submit(); });
+  amountInput.addEventListener('keydown', e => { if(e.key === 'Enter') submit(); });
+  pane.appendChild(addRow);
+
+  document.getElementById('newItemBtn').onclick = () => nameInput.focus();
+}
+
+function updateStatusCount(){
+  const label = document.getElementById('itemCountLabel');
+  if(activeFolderId === null){
+    label.textContent = `${state.folders.length} folder${state.folders.length===1?'':'s'}`;
+  } else {
+    const folder = state.folders.find(f => f.id === activeFolderId);
+    const total = folder ? folder.items.length : 0;
+    const done = folder ? folder.items.filter(i => i.checked).length : 0;
+    label.textContent = `${total} item${total===1?'':'s'} · ${done} checked`;
+  }
+}
+
+function renderMoney(){
+  const cur = currentMoney();
+  document.getElementById('moneyValue').textContent = fmt(cur);
+  document.getElementById('dropCurrent').textContent = fmt(cur);
+  document.getElementById('dropPrevious').textContent = fmt(state.previousEarnings);
+  document.getElementById('dropLifetime').textContent = fmt(state.lifetime);
+}
+document.getElementById('moneyBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('moneyBtn').classList.toggle('open');
+  document.getElementById('moneyDropdown').classList.toggle('open');
+});
+document.addEventListener('click', () => {
+  document.getElementById('moneyBtn').classList.remove('open');
+  document.getElementById('moneyDropdown').classList.remove('open');
+});
+
+document.getElementById('newFolderBtn').addEventListener('click', () => {
+  document.getElementById('newFolderInline').classList.add('open');
+});
+document.getElementById('showNewFolderInline').addEventListener('click', () => {
+  document.getElementById('newFolderInline').classList.toggle('open');
+});
+document.getElementById('nfConfirm').addEventListener('click', () => {
+  const name = document.getElementById('nfName').value.trim();
+  if(!name) return;
+  const id = uid();
+  state.folders.push({ id, name, items: [] });
+  document.getElementById('nfName').value = '';
+  document.getElementById('newFolderInline').classList.remove('open');
+  saveState();
+  navigateTo(id);
+});
+
+const searchInput = document.getElementById('searchInput');
+const clearSearchBtn = document.getElementById('clearSearch');
+searchInput.addEventListener('input', () => {
+  searchQuery = searchInput.value;
+  clearSearchBtn.classList.toggle('show', searchQuery.length > 0);
+  renderContent();
+});
+clearSearchBtn.addEventListener('click', () => {
+  searchQuery = '';
+  searchInput.value = '';
+  clearSearchBtn.classList.remove('show');
+  searchInput.focus();
+  renderContent();
+});
+
+document.getElementById('backBtn').addEventListener('click', goBack);
+document.getElementById('forwardBtn').addEventListener('click', goForward);
+
+function updateNavButtons(){
+  document.getElementById('backBtn').disabled = historyIndex <= 0;
+  document.getElementById('forwardBtn').disabled = historyIndex >= historyStack.length - 1;
+}
+
+function msToFriendly(ms){
+  const day = 24 * 60 * 60 * 1000;
+  const hour = 60 * 60 * 1000;
+  const minute = 60 * 1000;
+  if(ms % day === 0) return { amount: ms / day, unit: 'days' };
+  if(ms % hour === 0) return { amount: ms / hour, unit: 'hours' };
+  return { amount: Math.round(ms / minute), unit: 'minutes' };
+}
+
+function unitToMs(unit){
+  if(unit === 'days') return 24 * 60 * 60 * 1000;
+  if(unit === 'hours') return 60 * 60 * 1000;
+  return 60 * 1000;
+}
+
+function daysInMonth(year, monthIndex){
+  return new Date(year, monthIndex + 1, 0).getDate();
+}
+
+function computeNextOccurrence(schedule, afterMs){
+  const [hh, mm] = schedule.time.split(':').map(Number);
+
+  if(schedule.repeat === 'weekly'){
+    const after = new Date(afterMs);
+    let candidate = new Date(after.getFullYear(), after.getMonth(), after.getDate(), hh, mm, 0, 0);
+    const diff = (schedule.weekday - candidate.getDay() + 7) % 7;
+    candidate.setDate(candidate.getDate() + diff);
+    if(candidate.getTime() <= afterMs) candidate.setDate(candidate.getDate() + 7);
+    return candidate;
+  }
+
+  if(schedule.repeat === 'monthly'){
+    const after = new Date(afterMs);
+    let year = after.getFullYear();
+    let month = after.getMonth();
+    const build = (y, m) => {
+      const day = Math.min(schedule.day, daysInMonth(y, m));
+      return new Date(y, m, day, hh, mm, 0, 0);
+    };
+    let candidate = build(year, month);
+    if(candidate.getTime() <= afterMs){
+      month += 1;
+      if(month > 11){ month = 0; year += 1; }
+      candidate = build(year, month);
+    }
+    return candidate;
+  }
+
+  if(schedule.repeat === 'yearly'){
+    const after = new Date(afterMs);
+    let year = after.getFullYear();
+    const build = (y) => {
+      const day = Math.min(schedule.day, daysInMonth(y, schedule.month));
+      return new Date(y, schedule.month, day, hh, mm, 0, 0);
+    };
+    let candidate = build(year);
+    if(candidate.getTime() <= afterMs) candidate = build(year + 1);
+    return candidate;
+  }
+
+  return new Date(afterMs + 7 * 24 * 60 * 60 * 1000);
+}
+
+function recomputeNextReset(basisMs){
+  if(state.resetMode === 'schedule'){
+    state.nextResetAt = computeNextOccurrence(state.resetSchedule, basisMs).getTime();
+  } else {
+    state.nextResetAt = basisMs + state.resetIntervalMs;
+  }
+}
+
+const settingsModal = document.getElementById('settingsModal');
+const resetTypeSelect = document.getElementById('resetType');
+const intervalFields = document.getElementById('intervalFields');
+const scheduleFields = document.getElementById('scheduleFields');
+const resetAmountInput = document.getElementById('resetAmount');
+const resetUnitSelect = document.getElementById('resetUnit');
+const scheduleRepeatSelect = document.getElementById('scheduleRepeat');
+const weeklyGroup = document.getElementById('weeklyGroup');
+const yearlyGroup = document.getElementById('yearlyGroup');
+const dayOfMonthGroup = document.getElementById('dayOfMonthGroup');
+const scheduleWeekdaySelect = document.getElementById('scheduleWeekday');
+const scheduleMonthSelect = document.getElementById('scheduleMonth');
+const scheduleDayInput = document.getElementById('scheduleDay');
+const scheduleTimeInput = document.getElementById('scheduleTime');
+const modalCurrentInterval = document.getElementById('modalCurrentInterval');
+
+function updateTypeFieldVisibility(){
+  const isSchedule = resetTypeSelect.value === 'schedule';
+  intervalFields.style.display = isSchedule ? 'none' : 'block';
+  scheduleFields.style.display = isSchedule ? 'block' : 'none';
+}
+
+function updateRepeatFieldVisibility(){
+  const repeat = scheduleRepeatSelect.value;
+  weeklyGroup.style.display = repeat === 'weekly' ? 'block' : 'none';
+  yearlyGroup.style.display = repeat === 'yearly' ? 'block' : 'none';
+  dayOfMonthGroup.style.display = (repeat === 'monthly' || repeat === 'yearly') ? 'block' : 'none';
+}
+
+resetTypeSelect.addEventListener('change', updateTypeFieldVisibility);
+scheduleRepeatSelect.addEventListener('change', updateRepeatFieldVisibility);
+
+function openSettings(){
+  resetTypeSelect.value = state.resetMode;
+  const friendly = msToFriendly(state.resetIntervalMs);
+  resetAmountInput.value = friendly.amount;
+  resetUnitSelect.value = friendly.unit;
+
+  scheduleRepeatSelect.value = state.resetSchedule.repeat;
+  scheduleWeekdaySelect.value = String(state.resetSchedule.weekday);
+  scheduleMonthSelect.value = String(state.resetSchedule.month);
+  scheduleDayInput.value = state.resetSchedule.day;
+  scheduleTimeInput.value = state.resetSchedule.time;
+
+  updateTypeFieldVisibility();
+  updateRepeatFieldVisibility();
+  modalCurrentInterval.textContent = `Next reset: ${new Date(state.nextResetAt).toLocaleString()}`;
+  settingsModal.classList.add('open');
+}
+
+function closeSettings(){
+  settingsModal.classList.remove('open');
+}
+
+document.getElementById('settingsBtn').addEventListener('click', openSettings);
+document.getElementById('settingsClose').addEventListener('click', closeSettings);
+settingsModal.addEventListener('click', (e) => { if(e.target === settingsModal) closeSettings(); });
+
+document.getElementById('saveResetBtn').addEventListener('click', () => {
+  if(resetTypeSelect.value === 'interval'){
+    const amount = parseFloat(resetAmountInput.value);
+    if(!amount || amount <= 0) return;
+    state.resetMode = 'interval';
+    state.resetIntervalMs = amount * unitToMs(resetUnitSelect.value);
+  } else {
+    const day = parseInt(scheduleDayInput.value, 10);
+    if(!scheduleTimeInput.value) return;
+    if((scheduleRepeatSelect.value === 'monthly' || scheduleRepeatSelect.value === 'yearly') && (!day || day < 1 || day > 31)) return;
+    state.resetMode = 'schedule';
+    state.resetSchedule = {
+      repeat: scheduleRepeatSelect.value,
+      weekday: parseInt(scheduleWeekdaySelect.value, 10),
+      day: day || 1,
+      month: parseInt(scheduleMonthSelect.value, 10),
+      time: scheduleTimeInput.value
+    };
+  }
+  recomputeNextReset(Date.now());
+  saveState();
+  updateCountdown();
+  closeSettings();
+});
+
+document.getElementById('resetNowBtn').addEventListener('click', () => {
+  const payout = currentMoney();
+  state.previousEarnings = payout;
+  state.lifetime += payout;
+  state.folders.forEach(f => f.items.forEach(i => i.checked = false));
+  state.lastReset = Date.now();
+  recomputeNextReset(Date.now());
+  saveState();
+  closeSettings();
+  render();
+  updateCountdown();
+});
+
+function checkAndMaybeReset(){
+  const now = Date.now();
+  if(now >= state.nextResetAt){
+    const payout = currentMoney();
+    state.previousEarnings = payout;
+    state.lifetime += payout;
+    state.folders.forEach(f => f.items.forEach(i => i.checked = false));
+    state.lastReset = now;
+    recomputeNextReset(state.nextResetAt);
+    saveState();
+    render();
+  }
+}
+
+function updateCountdown(){
+  const remaining = Math.max(0, state.nextResetAt - Date.now());
+  const totalSec = Math.floor(remaining / 1000);
+  const days = Math.floor(totalSec / 86400);
+  const h = Math.floor((totalSec % 86400) / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const label = days > 0
+    ? `${days}d ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+    : `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('countdownText').textContent = label;
+}
+
+function render(){
+  renderNav();
+  renderBreadcrumb();
+  renderContent();
+  renderMoney();
+  updateNavButtons();
+}
+
+(async () => {
+  await loadState();
+  render();
+  updateCountdown();
+})();
+
+updateCountdown();
+setInterval(() => { checkAndMaybeReset(); updateCountdown(); }, 1000);
+</script>
+</body>
+</html>

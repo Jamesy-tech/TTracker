@@ -1,0 +1,521 @@
+{
+  "folders": [
+    {
+      "id": "kb3o6m4v",
+      "items": [
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "qyhgmj4t",
+          "name": "Washing"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "33w2zz0w",
+          "name": "Load dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "41qxw5oe",
+          "name": "Unload dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "us0lvvl9",
+          "name": "Take out the trash"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "v2miwhp8",
+          "name": "Take out the recycling"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "l5dc7gmc",
+          "name": "Tidy bedroom"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "7t7mcuci",
+          "name": "Set table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "x316lvtr",
+          "name": "Clear table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "15b6bfzy",
+          "name": "Clean shower"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "g2dfpc23",
+          "name": "Vacuum"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "khlq8dm9",
+          "name": "Make bed"
+        }
+      ],
+      "name": "Chores [Monday]"
+    },
+    {
+      "id": "81zwecbu",
+      "items": [
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "bjdnei0t",
+          "name": "Washing"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "qzigm2bm",
+          "name": "Load dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "xjrtjb3m",
+          "name": "Unload dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "8j2lgt6o",
+          "name": "Take out the trash"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "87t5j0m9",
+          "name": "Take out the recycling"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "s17or0kh",
+          "name": "Tidy bedroom"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "voal4s1c",
+          "name": "Set table"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "hoqziyzo",
+          "name": "Clear table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "ppipgbpg",
+          "name": "Clean shower"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "is6svkzw",
+          "name": "Vacuum"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "dh22vs23",
+          "name": "Make bed"
+        }
+      ],
+      "name": "Chores [Tuesday]"
+    },
+    {
+      "id": "0zo6exzs",
+      "items": [
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "ccy9ahql",
+          "name": "Washing"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "8zamjoh6",
+          "name": "Load dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "ag717vb1",
+          "name": "Unload dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "zlz0osln",
+          "name": "Take out the trash"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "22u9ivx4",
+          "name": "Take out the recycling"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "5to6379r",
+          "name": "Tidy bedroom"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "xqxszbhd",
+          "name": "Set table"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "tve0jhhr",
+          "name": "Clear table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "lkyi0w23",
+          "name": "Clean shower"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "d3yien5k",
+          "name": "Vacuum"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "deq8odpp",
+          "name": "Make bed"
+        }
+      ],
+      "name": "Chores [Wednesday]"
+    },
+    {
+      "id": "0ygxyb8e",
+      "items": [
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "yq9oltm7",
+          "name": "Washing"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "ppgo5a8z",
+          "name": "Load dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "bajk560s",
+          "name": "Unload dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "eguhi20o",
+          "name": "Take out the trash"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "nkax4l2j",
+          "name": "Take out the recycling"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "eky35tol",
+          "name": "Tidy bedroom"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "rhwtsihi",
+          "name": "Set table"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "wxgawco1",
+          "name": "Clear table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "meipuf0v",
+          "name": "Clean shower"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "ao2d8ca4",
+          "name": "Vacuum"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "wqfklemd",
+          "name": "Make bed"
+        }
+      ],
+      "name": "Chores [Thursday]"
+    },
+    {
+      "id": "53xmueed",
+      "items": [
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "e3ly8s4m",
+          "name": "Washing"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "sy6m2y0u",
+          "name": "Load dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": true,
+          "id": "thijpqo6",
+          "name": "Unload dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "q4esnkr1",
+          "name": "Take out the trash"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "zgol899c",
+          "name": "Take out the recycling"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "6or93zr1",
+          "name": "Tidy bedroom"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "0xv4etbq",
+          "name": "Set table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "qnlkuebw",
+          "name": "Clear table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "9mxrm5ft",
+          "name": "Clean shower"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "x3cjgfcp",
+          "name": "Vacuum"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "xir5wi1x",
+          "name": "Make bed"
+        }
+      ],
+      "name": "Chores [Friday]"
+    },
+    {
+      "id": "mp6tt8x9",
+      "items": [
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "y6kie573",
+          "name": "Washing"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "wzssm8yw",
+          "name": "Load dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "uouvz9ge",
+          "name": "Unload dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "uzcywv9e",
+          "name": "Take out the trash"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "gx5sbmod",
+          "name": "Take out the recycling"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "l9epeshb",
+          "name": "Tidy bedroom"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "d757rtaw",
+          "name": "Set table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "hz4yl3am",
+          "name": "Clear table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "kmnta518",
+          "name": "Clean shower"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "tmqz5bey",
+          "name": "Vacuum"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "yuz4brlz",
+          "name": "Make bed"
+        }
+      ],
+      "name": "Chores [Saturday]"
+    },
+    {
+      "id": "81sj91iu",
+      "items": [
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "9aka5x63",
+          "name": "Washing"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "e3sj0eji",
+          "name": "Load dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "u0fj5o08",
+          "name": "Unload dishwasher"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "lh4v149w",
+          "name": "Take out the trash"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "7kft47eb",
+          "name": "Take out the recycling"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "4puk649s",
+          "name": "Tidy bedroom"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "4khbdrcy",
+          "name": "Set table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "pn0iuotn",
+          "name": "Clear table"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "su4lwjvm",
+          "name": "Clean shower"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "0y979eoo",
+          "name": "Vacuum"
+        },
+        {
+          "amount": 0.5,
+          "checked": false,
+          "id": "245waux4",
+          "name": "Make bed"
+        }
+      ],
+      "name": "Chores [Sunday]"
+    }
+  ],
+  "lastReset": 1783569811883,
+  "lifetime": 0,
+  "nextResetAt": 1783684800000,
+  "previousEarnings": 0,
+  "resetIntervalMs": 120000,
+  "resetMode": "schedule",
+  "resetSchedule": {
+    "day": 1,
+    "month": 0,
+    "repeat": "weekly",
+    "time": "00:00",
+    "weekday": 6
+  }
+}
